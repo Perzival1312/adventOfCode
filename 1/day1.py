@@ -34,3 +34,63 @@
 # In this example, the calibration values of these four lines are 12, 38, 15, and 77. Adding these together produces 142.
 
 # Consider your entire calibration document. What is the sum of all of the calibration values?
+
+NUMBERS = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+
+total = 0
+with open('day1.txt', 'r') as p:
+    for word in p.readlines():
+        leftmost = -1
+        rightmost = -1
+        for char in word:
+            if char in NUMBERS:
+                if leftmost == -1:
+                    leftmost = int(char)
+                    rightmost = int(char)
+                else:
+                    rightmost = int(char)
+        num = leftmost*10 + rightmost
+        total += num
+        if num >= 100 or num<=10:
+            print(leftmost, rightmost, num, word)
+            break
+
+print(total)
+
+one
+two
+three
+four
+five
+six
+seven
+eight
+nine
+zero
+
+
+
+# nums = []
+# with open('day1.txt', 'r') as p:
+#     for word in p.readlines():
+#         number = ''
+#         # print(word)
+#         for char in word:
+#             # print(char)
+#             if char in NUMBERS:
+#                 number += char
+#                 break
+#                 # print(number, char)
+#         for i in range(len(word)-1, -1, -1):
+#             char = word[i]
+#             if char in NUMBERS:
+#                 number += char
+#                 break
+#         print(word, number, int(number[0])*10 + int(number[-1]))
+#         nums.append(int(number[0])*10 + int(number[-1]))
+#         total += int(number[0])*10 + int(number[-1])
+
+# for num in nums:
+#     total += num
+# print(total)
+# print(len(nums))
