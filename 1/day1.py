@@ -51,23 +51,8 @@ with open('day1.txt', 'r') as p:
                     rightmost = int(char)
         num = leftmost*10 + rightmost
         total += num
-        if num >= 100 or num<=10:
-            print(leftmost, rightmost, num, word)
-            break
 
 print(total)
-
-one
-two
-three
-four
-five
-six
-seven
-eight
-nine
-zero
-
 
 
 # nums = []
@@ -93,4 +78,3 @@ zero
 # for num in nums:
 #     total += num
 # print(total)
-# print(len(nums))
