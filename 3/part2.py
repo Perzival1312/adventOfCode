@@ -37,3 +37,48 @@
 # Adding up all of the gear ratios produces 467835.
 
 # What is the sum of all of the gear ratios in your engine schematic?
+
+
+NUMBERS = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+matrix = []
+part_nums = []
+total = 0
+
+
+with open('real.txt', 'r') as p:
+    for line in p.readlines():
+        matrix.append(list('.'+line.strip()+'.'))
+
+for r, row in enumerate(matrix):
+    for c, char in enumerate(row):
+        if char == '*':
+            nearby = []
+            # search in circle around spotted symbol
+            for i in range(-1, 2):
+                for j in range(-1, 2):
+                    if matrix[r+i][c+j] in NUMBERS:
+                        # found digit near symbol
+                        end_of_num = c+j
+                        begin_of_num = c+j
+                        num = ''
+                        # look to right for rest of number
+                        for k in range(1, 4):
+                            if matrix[r+i][c+j+k] in NUMBERS:
+                                end_of_num = c+j+k
+                            else:
+                                break
+                        # look to left for rest of number
+                        for k in range(1, 4):
+                            if matrix[r+i][c+j-k] in NUMBERS:
+                                begin_of_num = c+j-k
+                            else:
+                                break
+                        for l in range(begin_of_num, end_of_num+1):
+                            num += matrix[r+i][l]
+                            matrix[r+i][l] = '.'
+                        num = int(num)
+                        nearby.append(num)
+            if len(nearby) == 2:
+                ratio = nearby[0] * nearby[1]
+                total += ratio
+print(total)
