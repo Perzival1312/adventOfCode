@@ -42,4 +42,34 @@
 # games that would have been possible, you get 8.
 
 # Determine which games would have been possible if the bag had been loaded with only
-# 2 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
+# 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
+
+GAME = {'red': 12, 'green': 13, 'blue': 14}
+possible = 0
+
+with open('day2.txt', 'r') as p:
+    for games in p.readlines():
+        colorCounts = {}
+        pulls = games.split(':')[1].strip().split(';')
+        gameNum = int(games.split(':')[0].strip().split(' ')[1])
+        for pull in pulls:
+            colors = pull.split(',')
+            # print(colors)
+            for color in colors:
+                i = color.strip().split(' ')
+                # print(i)
+                if i[1] in colorCounts:
+                    if int(i[0]) > colorCounts[i[1]]:
+                        colorCounts[i[1]] = int(i[0])
+                else:
+                    colorCounts[i[1]] = int(i[0])
+        # print(colorCounts)
+        for color, count in colorCounts.items():
+            # print(gameNum, color, count, GAME[color])
+            if count > GAME[color]:
+                break
+        else:
+            print(colorCounts, gameNum)
+            possible += gameNum
+
+print(possible)
