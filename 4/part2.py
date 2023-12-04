@@ -41,3 +41,37 @@
 # Including the original set of scratchcards, how many total scratchcards do you end up with?
 
 
+import math
+
+
+count = 0
+pile = []
+card_dict = {}
+
+with open('real.txt', 'r') as p:
+    for i, card in enumerate(p.readlines()):
+        pile.append(card)
+        card_dict[i+1] = 1
+
+for ind, card in enumerate(pile):
+    # def get_info(card, count):
+    for j in range(card_dict[ind+1]):
+        count += 1
+        card_num = int(card.split(' | ')[0].split(': ')[0].split(' ')[-1])
+        win = set(filter(None, card.strip().split(' | ')[0].split(': ')[1].strip().split(' ')))
+        chances = set(filter(None, card.strip().split(' | ')[1].strip().split(' ')))
+        score = math.floor((len(win.intersection(chances))))
+        for i in range(1, score+1):
+            card_dict[card_num + i] += 1
+        # print(card_num, score)
+
+        # print(card_num)
+    #     for i in range(score):
+    #         c = pile[card_num+i]
+    #         # print(c)
+    #         a = get_info(c, count)
+    #     return(score)
+    # score = get_info(card, count)
+        # print(card_num, score)
+print(card_dict)
+print(count)
