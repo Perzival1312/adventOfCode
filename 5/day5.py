@@ -130,16 +130,76 @@
 
 # What is the lowest location number that corresponds to any of the initial seed numbers?
 
-seed_map = {
-'seed': 13,
-'soil': 13,
-'fertilizer': 52,
-'water': 41,
-'light': 34,
-'temperature': 34,
-'humidity': 35,
-'location': 35
-}
+# 1 seed-to-soil map:
+# 2 soil-to-fertilizer map:
+# 3 fertilizer-to-water map:
+# 4 water-to-light map:
+# 5 light-to-temperature map:
+# 6 temperature-to-humidity map:
+# 7 humidity-to-location map:
 
-with open('sample.txt') as p:
-    pass
+# seed_map = {
+# 'seed': 13,
+# 'soil': 13,
+# 'fertilizer': 52,
+# 'water': 41,
+# 'light': 34,
+# 'temperature': 34,
+# 'humidity': 35,
+# 'location': 35
+# }
+
+seed_map = {}
+
+almanac = []
+
+with open('real.txt') as p:
+    for line in p.readlines():
+        almanac.append(line.strip())
+
+seeds_to_find = almanac[0].strip().split(': ')[1].split(' ')
+# print(seeds_to_find)
+
+ranges = []
+
+for i, line in enumerate(almanac):
+    # find empty lines
+    if not line:
+        ranges.append(i)
+
+for ind, r in enumerate(ranges):
+    seed_map[ind+1] = []
+    if len(ranges) == ind+1:
+        break
+    for i in range(r+1, ranges[ind+1]):
+        if almanac[i+1]:
+            seed_map[ind+1].append(almanac[i+1])
+
+t_map = {}
+seed_map.pop(8)
+# print(seed_map)
+
+for k, l in seed_map.items():
+    t_map[k] = {}
+    for num in l:
+        # for i in num.split(' '):
+        i = num.split(' ')
+        print(i)
+        for c, n in enumerate(range(int(i[0]), int(i[0])+int(i[2]))):
+            t_map[k][int(i[1])+c] = n
+            # print(k, i)
+        # print()
+# print(t_map)
+
+locations = []
+
+for seed in seeds_to_find:
+    next = int(seed)
+    for i in range(1, 8):
+        # print(t_map[i])
+        # print(next)
+        if t_map[i].__contains__(next):
+            next = t_map[i][next]
+    locations.append(next)
+
+print(min(locations))
