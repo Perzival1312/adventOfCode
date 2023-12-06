@@ -73,3 +73,23 @@
 # record in each race; in this example, if you multiply these values together, you get 288 (4 * 8 * 9).
 
 # Determine the number of ways you could beat the record in each race. What do you get if you multiply these numbers together?
+
+with open('real.txt', 'r') as p:
+    times = [int(i.strip()) for i in p.readline().strip().split(':')[1].strip().split('   ')]
+    distances = [int(i.strip()) for i in p.readline().strip().split(':')[1].strip().split('   ')]
+print(times, distances)
+
+wins = {}
+
+for i, time in enumerate(times):
+    count = 0
+    for h in range(1, time):
+        if h*(time-h) > distances[i]:
+            count += 1
+    wins[i] = count
+
+margin = 1
+for k, v in wins.items():
+    margin*=v
+print(margin)
+
