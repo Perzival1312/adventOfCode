@@ -180,16 +180,20 @@ seed_map.pop(8)
 # print(seed_map)
 
 for k, l in seed_map.items():
-    t_map[k] = {}
+    t_map[k] = []
     for num in l:
+        # print(num)
         # for i in num.split(' '):
         i = num.split(' ')
-        print(i)
-        for c, n in enumerate(range(int(i[0]), int(i[0])+int(i[2]))):
-            t_map[k][int(i[1])+c] = n
+        # print(i)
+        t_map[k].append(i)
+        # for c, n in enumerate(range(int(i[0]), int(i[0])+int(i[2]))):
+            # t_map[k][int(i[1])+c] = n
             # print(k, i)
         # print()
 # print(t_map)
+
+# print(seeds_to_find)
 
 locations = []
 
@@ -198,8 +202,16 @@ for seed in seeds_to_find:
     for i in range(1, 8):
         # print(t_map[i])
         # print(next)
-        if t_map[i].__contains__(next):
-            next = t_map[i][next]
+
+        for l in t_map[i]:
+            if next >= int(l[1]) and next <= int(l[1])+int(l[2]):
+                next += (int(l[0])-int(l[1]))
+                break
+            # print(next)
+            # range = l[1] -- l[1]+l[2]        if within +(l[1]-l[0])
+
+    # print(next)
     locations.append(next)
+
 
 print(min(locations))
