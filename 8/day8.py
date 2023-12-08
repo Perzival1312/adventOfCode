@@ -29,9 +29,9 @@
 # ZZZ = (ZZZ, ZZZ)
 
 # Starting with AAA, you need to look up the next element based on the next
-#  left/right instruction in your input. In this example, start with AAA and go right (R)
-#   by choosing the right element of AAA, CCC. Then, L means to choose the left element
-#   of CCC, ZZZ. By following the left/right instructions, you reach ZZZ in 2 steps.
+# left/right instruction in your input. In this example, start with AAA and go right (R)
+# by choosing the right element of AAA, CCC. Then, L means to choose the left element
+# of CCC, ZZZ. By following the left/right instructions, you reach ZZZ in 2 steps.
 
 # Of course, you might not find ZZZ right away. If you run out of left/right instructions,
 # repeat the whole sequence of instructions as necessary: RL really means RLRLRLRLRLRLRLRL...
@@ -44,3 +44,35 @@
 # ZZZ = (ZZZ, ZZZ)
 
 # Starting at AAA, follow the left/right instructions. How many steps are required to reach ZZZ?
+
+
+RL_map = {'R':1, 'L':0}
+direction_arr = []
+location_map = {}
+location = 'AAA'
+
+with open('real.txt', 'r') as p:
+    for direction in p.readline().strip():
+        direction_arr.append(RL_map[direction])
+    # skip empty line
+    p.readline()
+
+    for locations in p.readlines():
+        origin = locations.strip().split(' = ')[0]
+        destination0 = locations.strip().split(' = ')[1].split(', ')[0][1:]
+        destination1 = locations.strip().split(' = ')[1].split(', ')[1][:-1]
+        location_map[origin] = (destination0, destination1)
+
+steps = 0
+found = False
+while not found:
+    for direction in direction_arr:
+        steps += 1
+        location = location_map[location][direction]
+        if location == 'ZZZ':
+            found = True
+            print('done')
+            break
+
+    print(location, steps)
+print(steps)
