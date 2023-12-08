@@ -44,3 +44,88 @@
 
 # Simultaneously start on every node that ends with A.
 # How many steps does it take before you're only on nodes that end with Z?
+
+RL_map = {'R':1, 'L':0}
+direction_arr = []
+location_map = {}
+
+with open('real.txt', 'r') as p:
+    for direction in p.readline().strip():
+        direction_arr.append(RL_map[direction])
+    # skip empty line
+    p.readline()
+
+    for locations in p.readlines():
+        origin = locations.strip().split(' = ')[0]
+        destination0 = locations.strip().split(' = ')[1].split(', ')[0][1:]
+        destination1 = locations.strip().split(' = ')[1].split(', ')[1][:-1]
+        location_map[origin] = (destination0, destination1)
+
+starting_points = {}
+ending_points = {}
+
+for locations in location_map.keys():
+    if list(locations)[2] == 'A':
+        starting_points[locations] = []
+    elif list(locations)[2] == 'Z':
+        ending_points[locations] = False
+
+for l in starting_points.keys():
+    location = l
+    steps = 0
+    found = False
+    while not found and steps <= 1_000_000:
+        for direction in direction_arr:
+            steps += 1
+            location = location_map[location][direction]
+            if location in ending_points and not ending_points[location]:
+                ending_points[location] = True
+                starting_points[l].append(steps)
+                for ends in ending_points.values():
+                    if not ends:
+                        break
+                    found = True
+                break
+    else:
+        for k in ending_points.keys():
+            ending_points[k] = False
+
+
+def is_prime(a):
+    if a <= 2:
+        return True
+    elif a != 2 and a % 2 == 0:
+        return False
+    else:
+        return all(a % i for i in range(3, int(a**0.5)+1))
+
+PRIMES = [i for i in range(2, 100_000) if is_prime(i)]
+
+def prime_factors(n):
+    num = n
+    factors = []
+    i = 0
+    while i < len(PRIMES):
+        if is_prime(num):
+            factors.append(int(num))
+            return factors
+        prime = PRIMES[i]
+        if num % prime == 0:
+            factors.append(prime)
+            num = num/prime
+            i = -1
+        i += 1
+    else:
+        return []
+
+factors = set()
+lcm = 1
+
+for num in starting_points.values():
+    for i in prime_factors(num[0]):
+        factors.add(i)
+
+for factor in factors:
+    lcm *= factor
+
+print(lcm)

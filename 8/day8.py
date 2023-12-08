@@ -74,5 +74,4 @@ while not found:
             print('done')
             break
 
-    print(location, steps)
 print(steps)
